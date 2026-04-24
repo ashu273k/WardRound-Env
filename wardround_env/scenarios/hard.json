@@ -1,0 +1,41 @@
+[
+  {
+    "id": "hard_stroke_thrombolysis_consent",
+    "difficulty": "hard",
+    "title": "Acute stroke with consent dispute",
+    "patient_summary": {
+      "age": 79,
+      "sex": "M",
+      "diagnosis": "Acute ischemic stroke in treatment window",
+      "vitals": "BP 168/92, HR 96, neuro deficit evolving",
+      "labs": "Coagulation profile acceptable, CT no bleed"
+    },
+    "critical_facts": ["last-known-well time", "baseline functional status"],
+    "required_nursing_actions": ["activate stroke protocol", "prepare thrombolysis checklist"],
+    "family_concerns": ["risk of bleeding and disability", "whether to delay for second opinion"],
+    "contraindicated_orders": ["start anticoagulation before stroke team clearance"],
+    "consultant_disagreement": true,
+    "consultant_preferred_plan": "rapid protocolized thrombolysis pathway",
+    "ethical_conflict": true
+  },
+  {
+    "id": "hard_septic_shock_goals_of_care",
+    "difficulty": "hard",
+    "title": "Septic shock with goals-of-care conflict",
+    "patient_summary": {
+      "age": 84,
+      "sex": "F",
+      "diagnosis": "Septic shock with multi-organ risk",
+      "vitals": "BP 84/50 on fluids, HR 122, RR 30, altered mentation",
+      "labs": "Lactate high, creatinine rising, platelets low"
+    },
+    "critical_facts": ["code status", "vasopressor threshold and timing"],
+    "required_nursing_actions": ["start vasopressor prep", "hourly urine output and MAP charting"],
+    "family_concerns": ["fear of invasive care", "quality of life priorities"],
+    "contraindicated_orders": ["continued fluid-only strategy despite shock progression"],
+    "consultant_disagreement": true,
+    "consultant_preferred_plan": "urgent escalation with explicit goals-of-care discussion",
+    "ethical_conflict": true
+  }
+]
+

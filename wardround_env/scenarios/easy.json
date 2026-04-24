@@ -1,0 +1,41 @@
+[
+  {
+    "id": "easy_pneumonia_stable",
+    "difficulty": "easy",
+    "title": "Stable community-acquired pneumonia",
+    "patient_summary": {
+      "age": 54,
+      "sex": "M",
+      "diagnosis": "Community-acquired pneumonia",
+      "vitals": "BP 124/76, HR 92, RR 20, SpO2 95% on room air",
+      "labs": "WBC 12.1, CRP elevated, creatinine normal"
+    },
+    "critical_facts": ["antibiotic allergy status", "oxygen trend"],
+    "required_nursing_actions": ["start IV antibiotics", "repeat vitals in 4 hours"],
+    "family_concerns": ["when discharge is possible"],
+    "contraindicated_orders": ["high-dose NSAID with renal risk"],
+    "consultant_disagreement": false,
+    "consultant_preferred_plan": "continue guideline antibiotics and monitor",
+    "ethical_conflict": false
+  },
+  {
+    "id": "easy_uti_improving",
+    "difficulty": "easy",
+    "title": "UTI improving on therapy",
+    "patient_summary": {
+      "age": 31,
+      "sex": "F",
+      "diagnosis": "Complicated UTI",
+      "vitals": "BP 118/72, HR 86, Temp 37.4C",
+      "labs": "Urine culture pending, WBC down-trending"
+    },
+    "critical_facts": ["culture status", "fever trend"],
+    "required_nursing_actions": ["maintain IV fluids", "collect repeat urine sample"],
+    "family_concerns": ["pain control plan"],
+    "contraindicated_orders": ["nephrotoxic medication combo"],
+    "consultant_disagreement": false,
+    "consultant_preferred_plan": "continue current plan and reassess culture",
+    "ethical_conflict": false
+  }
+]
+

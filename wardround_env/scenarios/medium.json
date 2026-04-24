@@ -1,0 +1,41 @@
+[
+  {
+    "id": "medium_chf_fluid_conflict",
+    "difficulty": "medium",
+    "title": "Heart failure with fluid strategy conflict",
+    "patient_summary": {
+      "age": 72,
+      "sex": "F",
+      "diagnosis": "Acute decompensated heart failure",
+      "vitals": "BP 146/84, HR 104, RR 24, SpO2 93% on 2L oxygen",
+      "labs": "BNP elevated, creatinine borderline high"
+    },
+    "critical_facts": ["urine output trend", "renal function baseline"],
+    "required_nursing_actions": ["strict input-output charting", "administer IV diuretic now"],
+    "family_concerns": ["fear of ICU transfer"],
+    "contraindicated_orders": ["aggressive fluid bolus"],
+    "consultant_disagreement": true,
+    "consultant_preferred_plan": "a cautious diuresis strategy with tight renal monitoring",
+    "ethical_conflict": false
+  },
+  {
+    "id": "medium_sepsis_source_control",
+    "difficulty": "medium",
+    "title": "Early sepsis with source uncertainty",
+    "patient_summary": {
+      "age": 67,
+      "sex": "M",
+      "diagnosis": "Suspected sepsis, unclear source",
+      "vitals": "BP 102/64, HR 112, Temp 38.7C, RR 26",
+      "labs": "Lactate mildly elevated, WBC 15.5"
+    },
+    "critical_facts": ["blood culture timing", "lactate repeat plan"],
+    "required_nursing_actions": ["draw blood cultures before antibiotics", "start sepsis bundle checklist"],
+    "family_concerns": ["why condition changed suddenly"],
+    "contraindicated_orders": ["delay antibiotics without reason"],
+    "consultant_disagreement": true,
+    "consultant_preferred_plan": "broad-spectrum coverage with urgent source assessment",
+    "ethical_conflict": false
+  }
+]
+
