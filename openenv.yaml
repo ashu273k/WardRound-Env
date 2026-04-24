@@ -1,0 +1,27 @@
+spec_version: 1
+name: wardround-env
+type: space
+runtime: fastapi
+app: server.app:app
+port: 8000
+description: |
+  Multi-agent hospital ward-round simulator for OpenEnv Hackathon Theme #1.
+  The learning policy (Junior Doctor) coordinates with scripted Consultant, Nurse,
+  and Patient/Family agents under easy, medium, and hard scenarios.
+tasks:
+  - id: easy
+    name: Stable Routine Round
+    difficulty: easy
+    description: Cooperative team and routine decision pathway.
+  - id: medium
+    name: Conflicting Clinical Opinions
+    difficulty: medium
+    description: Consultant pressure and mild time constraints.
+  - id: hard
+    name: Ethical Conflict Under Time Pressure
+    difficulty: hard
+    description: Strong disagreement plus high urgency.
+metadata:
+  theme: "Theme #1 - Multi-Agent Interactions"
+  domain: healthcare
+  tags: [openenv, multi-agent, hospital, ward-round]

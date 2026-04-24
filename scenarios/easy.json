@@ -1,0 +1,15 @@
+{
+  "id": "easy",
+  "difficulty": "easy",
+  "consultant_style": "supportive",
+  "time_limit": 15,
+  "patients": [
+    {
+      "id": "P001",
+      "name": "Ramesh",
+      "age": 65,
+      "condition": "Stable pneumonia",
+      "golden": "continue_antibiotics"
+    }
+  ]
+}
