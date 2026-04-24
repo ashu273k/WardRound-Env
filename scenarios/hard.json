@@ -1,0 +1,22 @@
+{
+  "id": "hard",
+  "difficulty": "hard",
+  "consultant_style": "aggressive",
+  "time_limit": 10,
+  "patients": [
+    {
+      "id": "P003",
+      "name": "Rahul",
+      "age": 32,
+      "condition": "Acute abdominal pain",
+      "golden": "surgery_consult"
+    },
+    {
+      "id": "P004",
+      "name": "Meena",
+      "age": 71,
+      "condition": "Delirium",
+      "golden": "reduce_medication"
+    }
+  ]
+}

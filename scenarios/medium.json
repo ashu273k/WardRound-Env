@@ -1,0 +1,15 @@
+{
+  "id": "medium",
+  "difficulty": "medium",
+  "consultant_style": "conservative",
+  "time_limit": 12,
+  "patients": [
+    {
+      "id": "P002",
+      "name": "Sunita",
+      "age": 48,
+      "condition": "Chest pain",
+      "golden": "order_ecg"
+    }
+  ]
+}
