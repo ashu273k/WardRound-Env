@@ -1,0 +1,88 @@
+======================================================================
+  WardRound-Env: Behavior Comparison
+======================================================================
+
+
+────────────────────────────────────────────────────────────
+  DIFFICULTY: EASY
+────────────────────────────────────────────────────────────
+
+  BASELINE (random):
+    Reward:       -0.5400
+    Grader score: 0.2550
+    Turns:        8
+    Termination:  time_out
+    Patient:      0.700
+    Plan:         0.100
+    Team:         0.000
+    Time:         0.200
+    Communication:0.000
+
+  TRAINED (heuristic):
+    Reward:       +0.7825
+    Grader score: 0.9500
+    Turns:        1
+    Termination:  completed
+    Patient:      1.000
+    Plan:         1.000
+    Team:         0.750
+    Time:         1.000
+    Communication:1.000
+
+  IMPROVEMENT: +0.6950 (+272.5%)
+
+────────────────────────────────────────────────────────────
+  DIFFICULTY: MEDIUM
+────────────────────────────────────────────────────────────
+
+  BASELINE (random):
+    Reward:       -0.3850
+    Grader score: 0.2550
+    Turns:        6
+    Termination:  time_out
+    Patient:      0.700
+    Plan:         0.100
+    Team:         0.000
+    Time:         0.200
+    Communication:0.000
+
+  TRAINED (heuristic):
+    Reward:       +0.7450
+    Grader score: 0.9200
+    Turns:        1
+    Termination:  completed
+    Patient:      1.000
+    Plan:         1.000
+    Team:         0.600
+    Time:         1.000
+    Communication:1.000
+
+  IMPROVEMENT: +0.6650 (+260.8%)
+
+────────────────────────────────────────────────────────────
+  DIFFICULTY: HARD
+────────────────────────────────────────────────────────────
+
+  BASELINE (random):
+    Reward:       -0.3100
+    Grader score: 0.2550
+    Turns:        5
+    Termination:  time_out
+    Patient:      0.700
+    Plan:         0.100
+    Team:         0.000
+    Time:         0.200
+    Communication:0.000
+
+  TRAINED (heuristic):
+    Reward:       +0.7450
+    Grader score: 0.9200
+    Turns:        1
+    Termination:  completed
+    Patient:      1.000
+    Plan:         1.000
+    Team:         0.600
+    Time:         1.000
+    Communication:1.000
+
+  IMPROVEMENT: +0.6650 (+260.8%)
