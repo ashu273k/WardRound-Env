@@ -1,3 +1,12 @@
+---
+title: WardRound Env
+emoji: 🏥
+colorFrom: blue
+colorTo: green
+sdk: docker
+app_port: 8000
+pinned: false
+---
 # WardRound-Env
 
 WardRound-Env is an OpenEnv-compatible hospital ward-round simulator for **Theme #1: Multi-Agent Interactions**.
