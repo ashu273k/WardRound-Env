@@ -12,14 +12,12 @@ pinned: false
 WardRound-Env is an OpenEnv-compatible hospital ward-round simulator for **Theme #1: Multi-Agent Interactions**.
 The learning policy plays a Junior Doctor who must coordinate with scripted Consultant, Nurse, and Patient/Family agents.
 
-## Current status
-
-- Core OpenEnv environment implemented (`reset`, `step`, `state`)
-- Typed models implemented in `models.py`
-- Scenario-driven tasks implemented (`easy`, `medium`, `hard`)
-- Scripted team responses integrated via `agents.py`
-- FastAPI server entrypoint available at `server/app.py`
-- Dockerfile and package metadata included for deployment workflows
+- **Core OpenEnv environment** implemented (`reset`, `step`, `state`)
+- **Advanced Multi-Agent Reasoning**: Integrated hidden Consultant personalities (Conservative, Aggressive, Risk-Averse) and Family emotional states. 
+- **Unified Trust System**: Added a `trust_score` variable that bridges social interaction and clinical approval, creating complex decision trade-offs.
+- **Scenario-driven tasks**: `easy`, `medium`, and `hard` scenarios with dynamic deterioration.
+- **Grader & Validation**: Deterministic reward system and environment validation passed.
+- **FastAPI / OpenEnv Server**: Ready for deployment on Hugging Face Spaces.
 
 ## Repository layout
 
