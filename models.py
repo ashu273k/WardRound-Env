@@ -92,4 +92,9 @@ class WardRoundState(State):
     is_dead: dict[str, bool] = Field(default_factory=dict)
     treated: dict[str, bool] = Field(default_factory=dict)
     
+    # Hidden Multi-Agent States
+    consultant_type: str = "conservative"  # conservative, aggressive, risk_averse
+    family_states: dict[str, dict[str, Any]] = Field(default_factory=dict)
+    trust_score: float = 0.5  # 0.0 (incompetent) to 1.0 (expert)
+    
     started: bool = False
