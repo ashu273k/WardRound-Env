@@ -23,6 +23,11 @@ app = create_app(
     max_concurrent_envs=4,
 )
 
+# Explicitly enable documentation for Hugging Face Spaces
+app.docs_url = "/docs"
+app.redoc_url = "/redoc"
+app.openapi_url = "/openapi.json"
+
 
 @app.get("/")
 def root() -> dict[str, str]:
