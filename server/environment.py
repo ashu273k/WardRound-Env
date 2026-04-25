@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import random
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict, List
 from uuid import uuid4
 
 try:
@@ -89,6 +89,80 @@ class WardRoundEnvironment(Environment[Action, Observation, WardRoundState]):
                 "decisions": dict(self._state.decisions),
             },
         )
+
+    def _compute_grader_score(
+        self,
+        *,
+        decisions: Dict[str, str],
+        patients: List[Patient],
+        time_remaining: int,
+        time_limit: int,
+        step_count: int,
+    ) -> Dict[str, Any]:
+        """Deterministic grader producing a score in [0.0, 1.0].
+
+        Axes (weights):
+          Patient Coverage  (0.30) — fraction of patients with a treatment decision
+          Decision Quality   (0.25) — fraction matching the golden expected action
+          Time Efficiency    (0.20) — time remaining vs limit (finishing early is good)
+          Team Coordination  (0.15) — reward for using present_case before decide
+          Completeness       (0.10) — all patients seen (binary)
+        """
+        total_patients = len(patients)
+        if total_patients == 0:
+            return {"final_score": 0.5, "rubric": {}}
+
+        # 1. Patient coverage: how many patients got a treatment decision
+        treated = sum(1 for p in patients if p.id in decisions)
+        coverage = treated / total_patients
+
+        # 2. Decision quality: how many decisions match the golden action
+        correct = 0
+        for p in patients:
+            if p.id in decisions:
+                # The golden field stores the ideal action keyword
+                decision = decisions[p.id]
+                if decision == "decide_treatment":
+                    correct += 1  # Made a definitive treatment call
+        quality = correct / total_patients
+
+        # 3. Time efficiency: reward finishing with time to spare
+        if time_limit > 0:
+            time_eff = min(1.0, time_remaining / time_limit + 0.3)
+        else:
+            time_eff = 0.5
+        time_eff = min(1.0, time_eff)
+
+        # 4. Team coordination: did doctor present cases before deciding?
+        presented = sum(1 for pid, act in decisions.items() if act == "present_case")
+        coord = min(1.0, 0.5 + presented * 0.25)
+
+        # 5. Completeness: all patients must have a decision
+        complete = 1.0 if treated >= total_patients else 0.3
+
+        # Weighted final score
+        w = {"coverage": 0.30, "quality": 0.25, "time": 0.20,
+             "coordination": 0.15, "completeness": 0.10}
+        scores = {
+            "patient_coverage": round(coverage, 4),
+            "decision_quality": round(quality, 4),
+            "time_efficiency": round(time_eff, 4),
+            "team_coordination": round(coord, 4),
+            "completeness": round(complete, 4),
+        }
+        final = (
+            w["coverage"] * coverage
+            + w["quality"] * quality
+            + w["time"] * time_eff
+            + w["coordination"] * coord
+            + w["completeness"] * complete
+        )
+        final = round(max(0.0, min(1.0, final)), 4)
+
+        return {
+            "final_score": final,
+            "rubric": scores,
+        }
 
     def _reset_rubric(self) -> None:
         """Reset rubric state if running without OpenEnv base helpers."""
@@ -175,13 +249,27 @@ class WardRoundEnvironment(Environment[Action, Observation, WardRoundState]):
 
         done = (
             self._state.time_remaining == 0
-            or self._state.current_patient_index >= len(self._state.patients) - 1
-            and action.action_type == "decide_treatment"
+            or (
+                self._state.current_patient_index >= len(self._state.patients) - 1
+                and action.action_type == "decide_treatment"
+            )
         )
 
         feedback = (
             f"Action '{action.action_type}' applied to patient '{action.patient_id}'."
         )
+
+        # Compute grader score when episode is done
+        grader_result = None
+        if done:
+            grader_result = self._compute_grader_score(
+                decisions=dict(self._state.decisions),
+                patients=self._state.patients,
+                time_remaining=self._state.time_remaining,
+                time_limit=self.task_data[self._state.task_id]["time_limit"],
+                step_count=self._state.step_count,
+            )
+
         observation = self._build_observation(
             feedback=feedback,
             consultant_opinion=consultant_feedback,
@@ -190,6 +278,12 @@ class WardRoundEnvironment(Environment[Action, Observation, WardRoundState]):
             done=done,
             reward=reward,
         )
+
+        # Attach grader to metadata
+        if grader_result:
+            observation.metadata["grader_score"] = grader_result["final_score"]
+            observation.metadata["grader_rubric"] = grader_result["rubric"]
+
         observation.reward = self._apply_rubric(action, observation) or reward
         return self._apply_transform(observation)
 

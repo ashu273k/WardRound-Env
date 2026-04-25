@@ -1,0 +1,77 @@
+﻿
+============================================================
+  WardRound-Env ù Inference
+============================================================
+
+------------------------------------------------------------
+  TASK: EASY
+------------------------------------------------------------
+
+  Episode: 775d9060-179a-482c-b4ae-d71a29932920
+  Patient: Ramesh (ID: P001)
+  Condition: Stable pneumonia
+  Time budget: 15 turns
+
+python : Traceback (most 
+recent call last):
+At line:1 char:1
++ python inference.py 
+2>&1 | Out-File -FilePath 
+inference_out_utf8.txt  
+...
++ ~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo        
+      : NotSpecified: (T  
+  raceback (most recent   
+  call last)::String)     
+[], RemoteException
+    + FullyQualifiedError 
+   Id : NativeCommandErr  
+  or
+ 
+  File "C:\Users\abhij\Des
+ktop\Ward-Env\WardRound-En
+v\inference.py", line 
+233, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\abhij\Des
+ktop\Ward-Env\WardRound-En
+v\inference.py", line 
+197, in main
+    result = run_episode_l
+ocal(task_id, args.seed)
+  File "C:\Users\abhij\Des
+ktop\Ward-Env\WardRound-En
+v\inference.py", line 57, 
+in run_episode_local
+    print(
+    ~~~~~^
+        f"  Step {step}: 
+present_case \u2192 
+reward={obs.reward:.3f} "
+        ^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^
+        f"| consultant='{o
+bs.consultant_opinion}'"
+        ^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\abhij\App
+Data\Local\Programs\Python
+\Python313\Lib\encodings\c
+p1252.py", line 19, in 
+encode
+    return codecs.charmap_
+encode(input,self.errors,e
+ncoding_table)[0]
+           ~~~~~~~~~~~~~~~
+~~~~~~^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^
+UnicodeEncodeError: 
+'charmap' codec can't 
+encode character '\u2192' 
+in position 23: character 
+maps to <undefined>

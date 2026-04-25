@@ -1,0 +1,50 @@
+﻿
+============================================================
+  WardRound-Env ù Inference
+============================================================
+python : Traceback (most 
+recent call last):
+At line:1 char:1
++ python inference.py 
+2>&1 | Out-File -FilePath 
+test_error.txt -Encodin 
+...
++ ~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo        
+      : NotSpecified: (T  
+  raceback (most recent   
+  call last)::String)     
+[], RemoteException
+    + FullyQualifiedError 
+   Id : NativeCommandErr  
+  or
+ 
+  File "C:\Users\abhij\Des
+ktop\Ward-Env\WardRound-En
+v\inference.py", line 
+233, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\abhij\Des
+ktop\Ward-Env\WardRound-En
+v\inference.py", line 
+189, in main
+    print(f"\n{'\u2500' * 
+60}")
+    ~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\abhij\App
+Data\Local\Programs\Python
+\Python313\Lib\encodings\c
+p1252.py", line 19, in 
+encode
+    return codecs.charmap_
+encode(input,self.errors,e
+ncoding_table)[0]
+           ~~~~~~~~~~~~~~~
+~~~~~~^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^
+UnicodeEncodeError: 
+'charmap' codec can't 
+encode characters in 
+position 2-61: character 
+maps to <undefined>
