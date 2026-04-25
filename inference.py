@@ -112,6 +112,36 @@ def run_episode_local(task_id: str, seed: int) -> dict:
 #  Remote server mode (via OpenEnv client)
 # ═══════════════════════════════════════════════════════════════════════════
 
+import asyncio
+
+async def _run_remote_async(server_url: str, task_id: str, seed: int) -> dict:
+    from client import WardRoundEnvClient
+    
+    client = WardRoundEnvClient(base_url=server_url)
+    result = await client.reset(task_id=task_id, seed=seed)
+    print(f"  Connected to server at {server_url}")
+    print(f"  Task: {task_id} | Seed: {seed}")
+
+    actions = [
+        Action(action_type="present_case", patient_id="P001", content="Case summary."),
+        Action(action_type="decide_treatment", patient_id="P001", content="Treatment plan."),
+    ]
+    
+    i = 0
+    for i, action in enumerate(actions, 1):
+        result = await client.step(action)
+        print(f"  Step {i}: {action.action_type} -> done={result.done}")
+        if result.done:
+            break
+
+    return {
+        "task_id": task_id,
+        "seed": seed,
+        "steps": i,
+        "grader_score": getattr(result.observation, "metadata", {}).get("grader_score"),
+        "final_reward": result.reward,
+    }
+
 def run_episode_remote(server_url: str, task_id: str, seed: int) -> dict:
     """Run one episode against a remote WardRound-Env server."""
     try:
@@ -121,33 +151,12 @@ def run_episode_remote(server_url: str, task_id: str, seed: int) -> dict:
         return run_episode_local(task_id, seed)
 
     try:
-        client = WardRoundEnvClient(base_url=server_url)
-        result = client.reset(task_id=task_id, seed=seed)
-        print(f"  Connected to server at {server_url}")
-        print(f"  Task: {task_id} | Seed: {seed}")
-
-        # Simple 2-step policy via client
-        actions = [
-            Action(action_type="present_case", patient_id="P001", content="Case summary."),
-            Action(action_type="decide_treatment", patient_id="P001", content="Treatment plan."),
-        ]
-        for i, action in enumerate(actions, 1):
-            result = client.step(action)
-            print(f"  Step {i}: {action.action_type} -> done={result.done}")
-            if result.done:
-                break
-
-        return {
-            "task_id": task_id,
-            "seed": seed,
-            "steps": i,
-            "grader_score": getattr(result.observation, "metadata", {}).get("grader_score"),
-            "final_reward": result.reward,
-        }
+        return asyncio.run(_run_remote_async(server_url, task_id, seed))
     except Exception as e:
         print(f"  ⚠ Server connection failed: {e}")
         print("  Falling back to local mode.")
         return run_episode_local(task_id, seed)
+
 
 
 # ═══════════════════════════════════════════════════════════════════════════
