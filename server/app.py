@@ -15,6 +15,8 @@ except (ModuleNotFoundError, ImportError):
     from server.environment import WardRoundEnvironment
 
 
+import os
+
 app = create_app(
     WardRoundEnvironment,
     Action,
@@ -22,6 +24,11 @@ app = create_app(
     env_name="wardround-env",
     max_concurrent_envs=4,
 )
+
+# Hugging Face Spaces often require a root_path for /docs to work
+if os.environ.get("SPACE_ID"):
+    title = os.environ.get("SPACE_ID").split("/")[-1]
+    app.root_path = f"/embed/{os.environ.get('SPACE_ID')}/"
 
 # Explicitly enable documentation for Hugging Face Spaces
 app.docs_url = "/docs"
