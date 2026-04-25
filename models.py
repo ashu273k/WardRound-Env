@@ -83,4 +83,13 @@ class WardRoundState(State):
     patients: list[Patient] = Field(default_factory=list)
     time_remaining: int = 0
     decisions: dict[str, str] = Field(default_factory=dict)
+    
+    # Causal tracking properties
+    vitals_known: dict[str, bool] = Field(default_factory=dict)
+    labs_known: dict[str, bool] = Field(default_factory=dict)
+    consultant_approved: dict[str, bool] = Field(default_factory=dict)
+    vital_stability: dict[str, float] = Field(default_factory=dict)
+    is_dead: dict[str, bool] = Field(default_factory=dict)
+    treated: dict[str, bool] = Field(default_factory=dict)
+    
     started: bool = False
