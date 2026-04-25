@@ -15,5 +15,17 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
+          # Configure git
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Create a fresh branch with NO history to bypass HuggingFace tracking rules
+          git checkout --orphan hf-deploy
+          
+          # Add all current files (these no longer contain the PNGs)
+          git add -A
+          git commit -m "Deploy from GitHub Actions"
+          
+          # Push ONLY this fresh state to HuggingFace main branch
           git remote add space https://Abhijeet-2005:$HF_TOKEN@huggingface.co/spaces/Abhijeet-2005/WardRound-Env
-          git push --force space main
+          git push --force space hf-deploy:main
