@@ -252,6 +252,7 @@ class WardRoundEnvironment(Environment[Action, Observation, WardRoundState]):
             or (
                 self._state.current_patient_index >= len(self._state.patients) - 1
                 and action.action_type == "decide_treatment"
+                and len(self._state.decisions) == len(self._state.patients)
             )
         )
 
