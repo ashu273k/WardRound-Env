@@ -58,12 +58,11 @@ class ConsultantAgent:
             # Conservative needs full workup AND formal case presentation
             return vitals and labs and presented
         elif personality == "aggressive":
-            # Aggressive wants action. Won't approve if you wasted too much time (stability < 0.8)
-            return vitals and stability > 0.8
+            # Aggressive wants action. Approves with vitals if stability is reasonable
+            return vitals and stability > 0.5
         elif personality == "risk_averse":
-            # Risk averse needs everything and a VERY stable patient (>0.75)
-            # If they are crashing, they freeze and withhold approval
-            return vitals and labs and stability > 0.75
+            # Risk averse needs full workup plus reasonable stability
+            return vitals and labs and presented and stability > 0.4
         return False
 
     def respond(self, action: Action, personality: str, approved: bool) -> str:
@@ -189,5 +188,6 @@ class ScriptedWardTeam:
             family_concern=family_concern,
             approval_granted=approved,
             team_alignment=max(0.0, min(1.0, alignment)),
-            resistance_penalty=resistance_penalty
+            resistance_penalty=resistance_penalty,
+            trust_delta=trust_delta,
         )

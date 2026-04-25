@@ -93,8 +93,12 @@ class WardRoundEnvironment(Environment[Action, Observation, WardRoundState]):
             started=True,
         )
         
+        # Initial stability based on difficulty
+        stability_ranges = {"easy": (0.85, 0.98), "medium": (0.70, 0.90), "hard": (0.55, 0.80)}
+        stab_min, stab_max = stability_ranges.get(task_id, (0.70, 0.90))
+        
         for p in self._state.patients:
-            self._state.vital_stability[p.id] = self._rng.uniform(0.65, 0.95) # Start closer to danger
+            self._state.vital_stability[p.id] = self._rng.uniform(stab_min, stab_max)
             self._state.is_dead[p.id] = False
             self._state.treated[p.id] = False
             self._state.family_states[p.id] = {
@@ -134,6 +138,10 @@ class WardRoundEnvironment(Environment[Action, Observation, WardRoundState]):
         
         actual_pid = p_id
 
+        # Track action history for consultant approval logic
+        if action.action_type == "present_case":
+            self._state.decisions[actual_pid] = "present_case"
+        
         # --- CAUSAL AGENT INTERACTION ---
         state_vars = {
             "vitals_known": self._state.vitals_known.get(actual_pid, False),
@@ -228,18 +236,24 @@ class WardRoundEnvironment(Environment[Action, Observation, WardRoundState]):
                     self._state.family_states[actual_pid]["reassured"] = True
                     reward += 0.1
 
-        # CASCADING DETERIORATION - BRUTAL MODE
+        # CASCADING DETERIORATION - Difficulty-scaled decay rates
+        decay_rates = {"easy": 0.03, "medium": 0.06, "hard": 0.10}
+        accelerated_decay = {"easy": 0.06, "medium": 0.12, "hard": 0.25}
+        base_decay = decay_rates.get(self._state.task_id, 0.06)
+        fast_decay = accelerated_decay.get(self._state.task_id, 0.12)
+        
         for p in self._state.patients:
             if not self._state.treated[p.id] and not self._state.is_dead[p.id]:
                 # Dynamic decay: faster if unstable or if conflict exists
-                decay = 0.10 
-                if self._state.vital_stability[p.id] < 0.6: decay = 0.25 
+                decay = base_decay
+                if self._state.vital_stability[p.id] < 0.4: 
+                    decay = fast_decay
                 self._state.vital_stability[p.id] -= decay
                 
                 # Check for stability-based death
                 if self._state.vital_stability[p.id] <= 0:
                     self._state.is_dead[p.id] = True
-                    self._state.trust_score = max(0.0, self._state.trust_score - 0.5) # Trust collapse on death
+                    self._state.trust_score = max(0.0, self._state.trust_score - 0.5)
                     reward -= 2.0 
 
         all_resolved = all(self._state.treated.get(p.id) or self._state.is_dead.get(p.id) for p in self._state.patients)

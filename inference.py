@@ -40,8 +40,9 @@ def run_episode_local(task_id: str, seed: int) -> dict:
     print(f"  Time budget: {obs.time_remaining} turns")
     print()
 
-    # Deterministic baseline policy: present case → decide treatment
-    # per patient until all patients are seen
+    # Deterministic baseline policy following proper causal chain:
+    # present_case → ask_nurse (vitals) → request_test (labs) → 
+    # reassure_patient → ask_consultant (approval) → decide_treatment
     step = 0
     while not obs.done:
         patient = obs.current_patient
@@ -61,23 +62,67 @@ def run_episode_local(task_id: str, seed: int) -> dict:
         if obs.done:
             break
 
-        # Step 2: Reassure patient/family if concern is raised
-        if obs.family_concern:
-            action = Action(
-                action_type="reassure_patient",
-                patient_id=patient.id,
-                content="Addressing family concerns and explaining the care plan.",
-            )
-            obs = env.step(action)
-            step += 1
-            print(
-                f"  Step {step}: reassure_patient -> reward={obs.reward:.3f} "
-                f"| family='{obs.family_concern}'"
-            )
-            if obs.done:
-                break
+        # Step 2: Ask nurse for vitals
+        action = Action(
+            action_type="ask_nurse",
+            patient_id=patient.id,
+            content="Please provide current vitals.",
+        )
+        obs = env.step(action)
+        step += 1
+        print(
+            f"  Step {step}: ask_nurse -> reward={obs.reward:.3f} "
+            f"| nurse='{obs.nurse_status}'"
+        )
+        if obs.done:
+            break
 
-        # Step 3: Decide treatment
+        # Step 3: Request lab tests
+        action = Action(
+            action_type="request_test",
+            patient_id=patient.id,
+            content="Ordering relevant labs.",
+        )
+        obs = env.step(action)
+        step += 1
+        print(
+            f"  Step {step}: request_test -> reward={obs.reward:.3f} "
+            f"| nurse='{obs.nurse_status}'"
+        )
+        if obs.done:
+            break
+
+        # Step 4: Reassure patient/family
+        action = Action(
+            action_type="reassure_patient",
+            patient_id=patient.id,
+            content="Addressing family concerns and explaining the care plan.",
+        )
+        obs = env.step(action)
+        step += 1
+        print(
+            f"  Step {step}: reassure_patient -> reward={obs.reward:.3f} "
+            f"| family='{obs.family_concern}'"
+        )
+        if obs.done:
+            break
+
+        # Step 5: Ask consultant for approval
+        action = Action(
+            action_type="ask_consultant",
+            patient_id=patient.id,
+            content="Requesting approval for treatment plan.",
+        )
+        obs = env.step(action)
+        step += 1
+        print(
+            f"  Step {step}: ask_consultant -> reward={obs.reward:.3f} "
+            f"| consultant='{obs.consultant_opinion}'"
+        )
+        if obs.done:
+            break
+
+        # Step 6: Decide treatment (with approval)
         action = Action(
             action_type="decide_treatment",
             patient_id=patient.id,
@@ -227,8 +272,12 @@ def main() -> None:
             print(f"\n  Rubric for {r['task_id'].upper()}:")
             for axis, val in rubric.items():
                 label = axis.replace("_", " ").title()
-                bar = "#" * int(val * 20) + "." * (20 - int(val * 20))
-                print(f"    {label:<22} {bar} {val:.4f}")
+                # Handle non-numeric values (e.g., consultant_personality)
+                if isinstance(val, (int, float)):
+                    bar = "#" * int(val * 20) + "." * (20 - int(val * 20))
+                    print(f"    {label:<22} {bar} {val:.4f}")
+                else:
+                    print(f"    {label:<22} {val}")
 
     print(f"\n{'=' * 60}")
     avg_score = sum(
