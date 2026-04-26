@@ -97,3 +97,6 @@ openenv validate .
 
 This project is a simulation for research and education only.
 It is not medical advice and must not be used for real clinical decisions.
+
+---
+Hugging Face Link: [hf](https://huggingface.co/spaces/Abhijeet-2005/WardRound-Env)
